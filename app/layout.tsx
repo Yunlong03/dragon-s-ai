@@ -8,7 +8,13 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: 'Dragon S AI | Your Bridge to China\'s Robotics Revolution',
-  description: 'Dragon S AI helps Western companies source, evaluate, and partner with Chinese robotics players. AI-powered advisory services for the China robotics ecosystem.',
+  description: 'Dragon S AI helps Western companies source, evaluate, and partner with Chinese robotics players. AI-powered advisory for sourcing, due diligence, and partnership facilitation in China\'s robotics ecosystem.',
+  keywords: 'China robotics, Chinese robotics companies, robotics sourcing China, AI advisory, China AI market, robotics partnership China, due diligence China robotics',
+  openGraph: {
+    title: 'Dragon S AI | China Robotics Advisory',
+    description: 'Source, evaluate, and partner with Chinese robotics players. AI-powered intelligence meets on-the-ground access.',
+    type: 'website',
+  },
   generator: 'v0.app',
   icons: {
     icon: [
