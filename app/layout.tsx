@@ -2,16 +2,17 @@ import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
+import { Navbar } from "@/components/navbar"
 
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Dragon S AI | Your Bridge to China\'s Robotics Revolution',
-  description: 'Dragon S AI helps Western companies source, evaluate, and partner with Chinese robotics players. AI-powered advisory for sourcing, due diligence, and partnership facilitation in China\'s robotics ecosystem.',
+  title: 'Dragon C AI | Your Bridge to China\'s Robotics Revolution',
+  description: 'Dragon C AI helps Western companies source, evaluate, and partner with Chinese robotics players. AI-powered advisory for sourcing, due diligence, and partnership facilitation in China\'s robotics ecosystem.',
   keywords: 'China robotics, Chinese robotics companies, robotics sourcing China, AI advisory, China AI market, robotics partnership China, due diligence China robotics',
   openGraph: {
-    title: 'Dragon S AI | China Robotics Advisory',
+    title: 'Dragon C AI | China Robotics Advisory',
     description: 'Source, evaluate, and partner with Chinese robotics players. AI-powered intelligence meets on-the-ground access.',
     type: 'website',
   },
@@ -43,7 +44,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="font-sans antialiased">
-        {children}
+        <Navbar />
+        <div className="pt-16">{children}</div>
         <Analytics />
       </body>
     </html>

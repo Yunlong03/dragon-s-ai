@@ -1,7 +1,8 @@
 "use client"
 
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, MessageCircle } from "lucide-react"
+import { ArrowRight, BarChart3, MessageCircle } from "lucide-react"
 
 export function HeroSection() {
   return (
@@ -68,6 +69,19 @@ export function HeroSection() {
             Explore Services
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
+
+          <Button
+            asChild
+            size="lg"
+            variant="outline"
+            className="border-[#00a8ff] text-[#00f0ff] hover:bg-[#00a8ff]/10 px-8 py-6 text-lg"
+          >
+            <Link href="/tracker">
+              <BarChart3 className="mr-2 h-5 w-5" />
+              Explore Deal Flow
+            </Link>
+          </Button>
+
           <Button 
             size="lg" 
             variant="outline" 
