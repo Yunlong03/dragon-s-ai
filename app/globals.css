@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Dark futuristic theme - Dragon S AI */
+  /* Dark futuristic theme - C AI */
   --background: #0a0a0f;
   --foreground: #e4e4e7;
   --card: rgba(15, 15, 25, 0.8);

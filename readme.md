@@ -1,10 +1,10 @@
-# Dragon S AI
+# Dragon C AI
 
 Advisory firm bridging Western companies with China's robotics ecosystem.
 
 ## What This Is
 
-Landing page for Dragon S AI — a robotics-focused advisory firm offering sourcing, partnership facilitation, due diligence, market monitoring, market representation, and strategic advisory services.
+Landing page for Dragon C AI — a robotics-focused advisory firm offering sourcing, partnership facilitation, due diligence, market monitoring, market representation, and strategic advisory services.
 
 ## Tech Stack
 
@@ -27,4 +27,4 @@ MVP landing page. Backend tools (Deal Flow Tracker, AI monitoring) coming in Wee
 
 ## Part Of
 
-Dragon S company family. A Dragon S AI project.
+Dragon Caravan company family. A Dragon C AI project.

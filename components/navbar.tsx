@@ -9,11 +9,8 @@ import Image from "next/image"
 function Logo() {
   return (
     <div className="flex items-center gap-3">
-      {/* Replace with <Image src="/logo.png" alt="Dragon C AI" ... /> when ready */}
-      <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#00a8ff] to-[#00f0ff] flex items-center justify-center shrink-0">
-        <span className="text-[#0a0a0f] font-bold text-sm">DS</span>
-      </div>
-      <span className="text-white font-semibold tracking-wide">Dragon C AI</span>
+      <Image src="/logo.png" alt="Logo" width={36} height={36} className="rounded-lg shrink-0" />
+      <span className="text-white font-semibold tracking-wide">DRAGON C AI</span>
     </div>
   )
 }
