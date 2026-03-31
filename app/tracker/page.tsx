@@ -5,9 +5,9 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Footer } from "@/components/footer"
 
 const STATS_URL =
-  "https://dragon-deal-tracker--yunlong03.replit.app//api/stats"
+  "https://dragon-deal-tracker--yunlong03.replit.app/api/stats"
 const COMPANIES_URL =
-  "https://dragon-deal-tracker--yunlong03.replit.app//api/companies"
+  "https://dragon-deal-tracker--yunlong03.replit.app/api/companies"
 
 type StatsResponse = {
   total: number
