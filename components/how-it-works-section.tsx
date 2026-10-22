@@ -1,4 +1,4 @@
-import { FileText, Search, CheckCircle, Trophy } from "lucide-react"
+import { FileText, Search, CheckCircle, Trophy, ChevronRight } from "lucide-react"
 
 const steps = [
   {
@@ -11,7 +11,7 @@ const steps = [
     number: "02",
     icon: Search,
     title: "We Screen & Analyze",
-    description: "Our AI-powered system and expert analysts identify and evaluate the best matches from China's robotics ecosystem."
+    description: "Our team screens China's robotics ecosystem in Chinese and evaluates the best matches."
   },
   {
     number: "03",
@@ -44,14 +44,11 @@ export function HowItWorksSection() {
         </div>
 
         <div className="relative">
-          {/* Connection line - desktop */}
-          <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#00a8ff]/50 to-transparent -translate-y-1/2" />
-          
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {steps.map((step, index) => (
-              <div key={index} className="relative">
+              <div key={step.number} className="relative">
                 {/* Step card */}
-                <div className="group p-6 rounded-2xl bg-[#0f0f19]/80 border border-[#00a8ff]/20 backdrop-blur-sm hover:border-[#00a8ff]/50 transition-all duration-300 text-center">
+                <div className="group h-full p-6 rounded-2xl bg-[#0f0f19]/80 border border-[#00a8ff]/20 backdrop-blur-sm hover:border-[#00a8ff]/50 transition-all duration-300 text-center">
                   {/* Number badge */}
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-[#00a8ff] text-[#0a0a0f] font-bold text-sm flex items-center justify-center">
                     {step.number}
@@ -66,10 +63,10 @@ export function HowItWorksSection() {
                   </div>
                 </div>
 
-                {/* Arrow connector - between cards on desktop */}
+                {/* Arrow connector - centred in the gap-8 between cards on desktop */}
                 {index < steps.length - 1 && (
-                  <div className="hidden lg:block absolute top-1/2 -right-4 w-8 h-8 -translate-y-1/2 z-10">
-                    <div className="w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-l-8 border-l-[#00a8ff]/50" />
+                  <div aria-hidden="true" className="hidden lg:flex absolute top-1/2 -right-8 w-8 -translate-y-1/2 items-center justify-center">
+                    <ChevronRight className="w-6 h-6 text-[#00a8ff]/60" />
                   </div>
                 )}
               </div>
