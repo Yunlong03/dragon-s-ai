@@ -36,9 +36,11 @@ function isRateLimited(ip: string) {
   return recent.length > MAX_PER_WINDOW
 }
 
+// Use the LAST X-Forwarded-For entry: it is appended by Hostinger's proxy. Earlier entries come from
+// the client and can be faked to dodge the rate limit.
 function clientIp(req: Request) {
   const forwarded = req.headers.get("x-forwarded-for")
-  return forwarded?.split(",")[0]?.trim() || req.headers.get("x-real-ip") || "unknown"
+  return forwarded?.split(",").at(-1)?.trim() || req.headers.get("x-real-ip")?.trim() || "unknown"
 }
 
 function formatBody(d: ContactInput) {
