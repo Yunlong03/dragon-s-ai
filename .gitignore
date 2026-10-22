@@ -20,3 +20,6 @@ private/
 node_modules/
 .next/
 .DS_Store
+
+# TypeScript incremental build info
+*.tsbuildinfo

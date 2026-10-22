@@ -8,8 +8,8 @@ export function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           {/* Logo */}
           <div className="flex items-center gap-2">
-            <Image src="/logo.png" alt="Logo" width={32} height={32} className="rounded-lg" />
-            <span className="text-white font-semibold">Dragon C AI</span>
+            <Image src="/logo-small.png" alt="Dragon C logo" width={28} height={32} />
+            <span className="text-white font-semibold">Dragon C</span>
           </div>
 
           {/* Link */}
@@ -26,7 +26,7 @@ export function Footer() {
 
           {/* Copyright */}
           <div className="text-muted-foreground text-sm">
-            &copy; {currentYear} Dragon C AI. All rights reserved.
+            &copy; {currentYear} Dragon C. All rights reserved.
           </div>
         </div>
       </div>

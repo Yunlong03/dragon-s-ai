@@ -9,8 +9,8 @@ import Image from "next/image"
 function Logo() {
   return (
     <div className="flex items-center gap-3">
-      <Image src="/logo.png" alt="Logo" width={36} height={36} className="rounded-lg shrink-0" />
-      <span className="text-white font-semibold tracking-wide">DRAGON C AI</span>
+      <Image src="/logo-small.png" alt="Dragon C logo" width={32} height={36} className="shrink-0" />
+      <span className="text-white font-semibold tracking-wide">Dragon C</span>
     </div>
   )
 }
