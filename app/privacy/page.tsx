@@ -51,9 +51,10 @@ const sections: { title: string; body: React.ReactNode }[] = [
     title: "5. Who handles it.",
     body: (
       <>
-        Our email provider (Proton AG, Switzerland) and our website hosting provider (Hostinger). Your data may
-        therefore be processed in Hong Kong, Switzerland and other places where these providers operate, which may not
-        offer the same level of protection as your home country. We use providers with strong security practices.
+        Our email service provider (based in Switzerland) and our website hosting provider process this data on our
+        behalf. Your data may therefore be processed in Hong Kong, Switzerland and other places where these providers
+        operate, which may not offer the same level of protection as your home country. We use providers with strong
+        security practices.
       </>
     ),
   },
