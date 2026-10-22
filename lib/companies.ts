@@ -103,3 +103,61 @@ export function loadCompanies(): CompanyRow[] {
   cache ??= parseCompanies(readFileSync(CSV_PATH, "utf8"))
   return cache
 }
+
+/** What the tracker UI receives: display-ready, serialisable, no hidden columns. */
+export type Company = {
+  id: string
+  nameEn: string
+  nameCn: string
+  sector: string
+  subSector: string
+  city: string
+  foundedYear: number | null
+  fundingStage: string
+  fundingTotalM: number | null
+  fundingLabel: string
+  productStatus: string
+  keyProducts: string
+  description: string
+  whyItMatters: string
+}
+
+/** "Singapore (founded in Beijing)" -> "Singapore" */
+export function normaliseCity(city: string): string {
+  return city.replace(/\s*\(founded in [^)]*\)\s*$/i, "")
+}
+
+export function formatFunding(millions: number | null): string {
+  return millions === null ? "—" : `US$ ${millions.toLocaleString("en-US")} M`
+}
+
+function parseNumber(value: string, column: CompanyColumn, name: string): number | null {
+  if (value === "") return null
+  const n = Number(value)
+  if (!Number.isFinite(n)) {
+    throw new Error(`data/companies.csv: ${column} for "${name}" is not a number: "${value}"`)
+  }
+  return n
+}
+
+export function getCompanies(): Company[] {
+  return loadCompanies().map((row, i) => {
+    const fundingTotalM = parseNumber(row.funding_total_m, "funding_total_m", row.name_en)
+    return {
+      id: String(i),
+      nameEn: row.name_en,
+      nameCn: row.name_cn,
+      sector: row.sector,
+      subSector: row.sub_sector,
+      city: normaliseCity(row.city),
+      foundedYear: parseNumber(row.founded_year, "founded_year", row.name_en),
+      fundingStage: row.funding_stage,
+      fundingTotalM,
+      fundingLabel: formatFunding(fundingTotalM),
+      productStatus: row.product_status,
+      keyProducts: row.key_products,
+      description: row.description,
+      whyItMatters: row.why_it_matters,
+    }
+  })
+}
