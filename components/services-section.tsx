@@ -35,7 +35,7 @@ const services = [
 
 export function ServicesSection() {
   return (
-    <section id="services" className="py-24 relative">
+    <section id="services" className="py-24 relative scroll-mt-16">
       <div className="absolute inset-0 bg-[#0a0a0f]" />
       
       <div className="relative z-10 container mx-auto px-4">

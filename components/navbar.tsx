@@ -1,8 +1,8 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
-import React, { useMemo, useState } from "react"
+import { usePathname } from "next/navigation"
+import React, { useState } from "react"
 import { Menu, X } from "lucide-react"
 import Image from "next/image"
 
@@ -16,34 +16,8 @@ function Logo() {
 }
 
 export function Navbar() {
-  const router = useRouter()
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
-
-  const isHome = useMemo(() => pathname === "/", [pathname])
-
-  function scrollToContact() {
-    const el = document.getElementById("contact")
-    if (!el) return
-
-    // Offset for the fixed navbar so the section isn't hidden under it.
-    const NAVBAR_OFFSET_PX = 84
-    const y = el.getBoundingClientRect().top + window.scrollY - NAVBAR_OFFSET_PX
-    window.scrollTo({ top: y, behavior: "smooth" })
-  }
-
-  function handleContactClick(e: React.MouseEvent) {
-    e.preventDefault()
-    setMobileOpen(false)
-
-    if (!isHome) {
-      router.push("/")
-      window.setTimeout(scrollToContact, 500)
-      return
-    }
-
-    scrollToContact()
-  }
 
   function NavLink({
     href,
@@ -94,14 +68,7 @@ export function Navbar() {
             <NavLink href="/tracker" active={pathname === "/tracker"}>
               Deal Flow Tracker
             </NavLink>
-            {/* Actual contact link for semantics */}
-            <button
-              type="button"
-              onClick={handleContactClick}
-              className="text-sm text-white/90 hover:text-white transition-colors px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00a8ff]/60"
-            >
-              Contact
-            </button>
+            <NavLink href="/#contact">Contact</NavLink>
           </nav>
 
           <button
@@ -133,13 +100,9 @@ export function Navbar() {
               >
                 Deal Flow Tracker
               </NavLink>
-              <button
-                type="button"
-                onClick={handleContactClick}
-                className="text-left text-sm text-white/90 hover:text-white transition-colors px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00a8ff]/60"
-              >
+              <NavLink href="/#contact" onClick={() => setMobileOpen(false)}>
                 Contact
-              </button>
+              </NavLink>
             </div>
           </div>
         </div>

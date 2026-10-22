@@ -35,7 +35,7 @@ export function ContactSection() {
   }
 
   return (
-    <section id="contact" className="py-24 relative">
+    <section id="contact" className="py-24 relative scroll-mt-16">
       <div className="absolute inset-0 bg-[#0a0a0f]" />
       
       {/* Background elements */}
