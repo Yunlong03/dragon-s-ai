@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import { Search } from "lucide-react"
+import { Search, Shuffle } from "lucide-react"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import type { Company } from "@/lib/companies"
 
@@ -25,6 +25,31 @@ const FACETS: { key: FacetKey; label: string; all: string; field: (c: Company) =
   { key: "stage", label: "Funding stage", all: "All stages", field: (c) => c.fundingStage },
   { key: "city", label: "City", all: "All cities", field: (c) => c.city },
 ]
+
+// Unfiltered view: a random sample of 4 cards on phones, 6 on tablets, 8 on laptops and up.
+const SAMPLE_SIZE = 8
+function sampleVisibility(i: number) {
+  if (i >= 6) return "hidden lg:block"
+  if (i >= 4) return "hidden md:block"
+  return ""
+}
+
+function shuffle<T>(items: T[]): T[] {
+  const a = [...items]
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+
+/** New random sample, preferring companies not in the previous one. */
+function pickSample(all: Company[], previous: Company[] | null) {
+  const prev = new Set(previous?.map((c) => c.id))
+  const fresh = shuffle(all.filter((c) => !prev.has(c.id)))
+  const seen = shuffle(all.filter((c) => prev.has(c.id)))
+  return [...fresh, ...seen].slice(0, SAMPLE_SIZE)
+}
 
 const CONTROL =
   "w-full h-10 rounded-xl border border-[#00a8ff]/20 bg-[#0a0a0f] px-3 text-sm text-white outline-none focus:ring-2 focus:ring-[#00a8ff]/60"
@@ -80,6 +105,8 @@ function writeFiltersToUrl(filters: Filters) {
 export function TrackerClient({ companies }: { companies: Company[] }) {
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS)
   const [urlLoaded, setUrlLoaded] = useState(false)
+  // Picked after mount only, so server and client render the same HTML (no hydration mismatch).
+  const [sample, setSample] = useState<Company[] | null>(null)
   const [selected, setSelected] = useState<Company | null>(null)
   const [detailsOpen, setDetailsOpen] = useState(false)
 
@@ -93,11 +120,12 @@ export function TrackerClient({ companies }: { companies: Company[] }) {
     return out
   }, [companies])
 
-  // The page is prerendered with all companies; apply URL filters once mounted, then keep the URL in sync.
+  // Once mounted: apply URL filters, pick the random sample, then keep the URL in sync.
   useEffect(() => {
     setFilters(readFiltersFromUrl(allOptions))
+    setSample(pickSample(companies, null))
     setUrlLoaded(true)
-  }, [allOptions])
+  }, [allOptions, companies])
 
   useEffect(() => {
     if (urlLoaded) writeFiltersToUrl(filters)
@@ -124,16 +152,16 @@ export function TrackerClient({ companies }: { companies: Company[] }) {
     }
   })
 
-  const results = companies
-    .filter((c) => matches(c))
-    .sort((a, b) => {
-      const byName = a.nameEn.localeCompare(b.nameEn, "en")
-      if (filters.sort === "founded") return compareDesc(a.foundedYear, b.foundedYear) || byName
-      if (filters.sort === "funding") return compareDesc(a.fundingTotalM, b.fundingTotalM) || byName
-      return byName
-    })
+  function bySort(a: Company, b: Company) {
+    const byName = a.nameEn.localeCompare(b.nameEn, "en")
+    if (filters.sort === "founded") return compareDesc(a.foundedYear, b.foundedYear) || byName
+    if (filters.sort === "funding") return compareDesc(a.fundingTotalM, b.fundingTotalM) || byName
+    return byName
+  }
 
-  const isFiltered = filters.sector || filters.stage || filters.city || query
+  const isFiltered = Boolean(filters.sector || filters.stage || filters.city || query)
+  const results = isFiltered ? companies.filter((c) => matches(c)).sort(bySort) : []
+  const shown = isFiltered ? results : sample ? [...sample].sort(bySort) : null
 
   function update(patch: Partial<Filters>) {
     setFilters((f) => ({ ...f, ...patch }))
@@ -206,11 +234,13 @@ export function TrackerClient({ companies }: { companies: Company[] }) {
         </div>
       </div>
 
-      <div className="mt-6 flex items-center justify-between gap-3">
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
         <p className="text-sm text-muted-foreground" aria-live="polite">
-          {results.length === 0
-            ? "No companies match these filters."
-            : `Showing ${results.length} of ${companies.length} companies`}
+          {isFiltered
+            ? results.length === 0
+              ? "No companies match these filters."
+              : `Showing ${results.length} of ${companies.length} companies`
+            : `A random selection of our ${companies.length} profiled companies. Use the filters or search to find any of them.`}
         </p>
         {isFiltered ? (
           <button
@@ -220,83 +250,31 @@ export function TrackerClient({ companies }: { companies: Company[] }) {
           >
             Clear filters
           </button>
-        ) : null}
+        ) : (
+          <button
+            type="button"
+            className="inline-flex items-center gap-2 rounded-xl border border-[#00a8ff]/30 px-3 py-1.5 text-sm text-[#00f0ff] hover:bg-[#00a8ff]/10 transition-colors"
+            onClick={() => setSample((prev) => pickSample(companies, prev))}
+          >
+            <Shuffle className="w-4 h-4" />
+            Show other companies
+          </button>
+        )}
       </div>
 
-      {/* Desktop: table */}
-      {results.length > 0 ? (
-        <div className="mt-4 hidden md:block overflow-x-auto rounded-2xl border border-[#00a8ff]/20">
-          <table className="w-full text-sm">
-            <thead className="bg-[#0f0f19] text-left text-xs uppercase tracking-wide text-muted-foreground">
-              <tr>
-                <th scope="col" className="px-4 py-3 font-medium">Company</th>
-                <th scope="col" className="px-4 py-3 font-medium">Sector</th>
-                <th scope="col" className="px-4 py-3 font-medium">City</th>
-                <th scope="col" className="px-4 py-3 font-medium">Founded</th>
-                <th scope="col" className="px-4 py-3 font-medium">Stage</th>
-                <th scope="col" className="px-4 py-3 font-medium text-right">Total funding</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#00a8ff]/10">
-              {results.map((c) => (
-                <tr
-                  key={c.id}
-                  onClick={() => openDetails(c)}
-                  className="cursor-pointer bg-[#0a0a0f] hover:bg-[#0f0f19] transition-colors"
-                >
-                  <td className="px-4 py-3 align-top">
-                    {/* The button gives keyboard access; its click bubbles to the row. */}
-                    <button type="button" className="text-left font-semibold text-white hover:text-[#00f0ff] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00a8ff]/60 rounded">
-                      {c.nameEn}
-                    </button>
-                    <div className="text-[#00f0ff]/90 text-xs mt-0.5">{c.nameCn}</div>
-                  </td>
-                  <td className="px-4 py-3 align-top">
-                    <div className="text-white">{c.sector}</div>
-                    <div className="text-xs text-muted-foreground mt-0.5">{c.subSector}</div>
-                  </td>
-                  <td className="px-4 py-3 align-top text-gray-300">{c.city}</td>
-                  <td className="px-4 py-3 align-top text-gray-300 tabular-nums">{c.foundedYear ?? "—"}</td>
-                  <td className="px-4 py-3 align-top text-gray-300 whitespace-nowrap">{c.fundingStage}</td>
-                  <td className="px-4 py-3 align-top text-right text-white whitespace-nowrap tabular-nums">
-                    {c.fundingLabel}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : null}
-
-      {/* Mobile: cards */}
-      <ul className="mt-4 grid gap-4 md:hidden">
-        {results.map((c) => (
-          <li key={c.id}>
-            <button
-              type="button"
-              onClick={() => openDetails(c)}
-              className="w-full text-left rounded-2xl border border-[#00a8ff]/20 bg-[#0f0f19] p-5 hover:border-[#00a8ff]/50 transition-colors"
-            >
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <div className="text-white font-semibold leading-tight">{c.nameEn}</div>
-                  <div className="text-[#00f0ff]/90 text-sm mt-1">{c.nameCn}</div>
-                </div>
-                <span className="shrink-0 rounded-xl border border-[#00a8ff]/20 bg-[#0a0a0f] px-3 py-1 text-xs text-[#00f0ff]">
-                  {c.fundingStage}
-                </span>
-              </div>
-              <div className="mt-3 text-sm text-gray-300">
-                {c.sector} · {c.subSector}
-              </div>
-              <div className="mt-1 text-sm text-muted-foreground">
-                {c.city}
-                {c.foundedYear ? ` · Founded ${c.foundedYear}` : ""} · <span className="text-white">{c.fundingLabel}</span>
-              </div>
-              <p className="mt-3 text-sm text-muted-foreground line-clamp-2">{c.description}</p>
-            </button>
-          </li>
-        ))}
+      <ul className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {shown === null
+          ? // Placeholders until the random sample is picked on the client.
+            Array.from({ length: SAMPLE_SIZE }, (_, i) => (
+              <li key={i} aria-hidden="true" className={sampleVisibility(i)}>
+                <div className="h-56 rounded-2xl border border-[#00a8ff]/10 bg-[#0f0f19] animate-pulse motion-reduce:animate-none" />
+              </li>
+            ))
+          : shown.map((c, i) => (
+              <li key={c.id} className={isFiltered ? "" : sampleVisibility(i)}>
+                <CompanyCard company={c} onOpen={() => openDetails(c)} />
+              </li>
+            ))}
       </ul>
 
       <Dialog open={detailsOpen} onOpenChange={setDetailsOpen}>
@@ -305,6 +283,30 @@ export function TrackerClient({ companies }: { companies: Company[] }) {
         </DialogContent>
       </Dialog>
     </>
+  )
+}
+
+function CompanyCard({ company: c, onOpen }: { company: Company; onOpen: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      className="h-full w-full flex flex-col text-left rounded-2xl border border-[#00a8ff]/20 bg-[#0f0f19] p-5 hover:border-[#00a8ff]/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00a8ff]/60 transition-colors"
+    >
+      <div className="text-white font-semibold leading-tight">{c.nameEn}</div>
+      <div className="text-[#00f0ff]/90 text-sm mt-1">{c.nameCn}</div>
+      <span className="mt-3 self-start rounded-xl border border-[#00a8ff]/20 bg-[#0a0a0f] px-2.5 py-1 text-xs text-[#00f0ff] whitespace-nowrap">
+        {c.fundingStage}
+      </span>
+      <div className="mt-3 text-sm text-gray-300">
+        {c.sector} · {c.subSector}
+      </div>
+      <div className="mt-1 text-sm text-muted-foreground">
+        {c.city}
+        {c.foundedYear ? ` · Founded ${c.foundedYear}` : ""} · <span className="text-white">{c.fundingLabel}</span>
+      </div>
+      <p className="mt-3 text-sm text-muted-foreground line-clamp-3">{c.description}</p>
+    </button>
   )
 }
 

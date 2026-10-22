@@ -1,19 +1,9 @@
 import Link from "next/link"
 import { ArrowRight, BarChart3 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { loadCompanies } from "@/lib/companies"
-
-const COMPANIES_SCREENED = "200+"
+import { TrackerStats } from "@/components/tracker-stats"
 
 export function TrackerPreviewSection() {
-  // Row count of data/companies.csv, read at build time.
-  const companiesProfiled = loadCompanies().length
-
-  const stats = [
-    { value: COMPANIES_SCREENED, label: "companies screened" },
-    { value: String(companiesProfiled), label: "companies profiled" },
-  ]
-
   return (
     <section className="py-24 relative">
       <div className="absolute inset-0 bg-[#0a0a0f]" />
@@ -56,19 +46,7 @@ export function TrackerPreviewSection() {
             </Button>
           </div>
 
-          <div className="grid grid-cols-2 gap-6">
-            {stats.map((stat) => (
-              <div
-                key={stat.label}
-                className="p-8 rounded-2xl bg-[#0f0f19]/80 border border-[#00a8ff]/20 text-center"
-              >
-                <div className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#00a8ff] to-[#00f0ff]">
-                  {stat.value}
-                </div>
-                <div className="text-sm text-muted-foreground mt-2">{stat.label}</div>
-              </div>
-            ))}
-          </div>
+          <TrackerStats />
         </div>
       </div>
     </section>
