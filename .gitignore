@@ -9,7 +9,12 @@ __v0_jsx-dev-runtime.ts
 next.user-config.*
 
 # Environment variables
-.env*.local
+.env*
+!.env.example
+
+# Private working files and local tool settings
+private/
+.claude/
 
 # Common ignores
 node_modules/
