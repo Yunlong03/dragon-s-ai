@@ -3,8 +3,13 @@ import { Search, Handshake, FileSearch, Activity, Building2, Lightbulb } from "l
 const services = [
   {
     icon: Search,
-    title: "Sourcing",
-    description: "Identify and shortlist the best Chinese robotics companies for your specific requirements, from component suppliers to complete system integrators."
+    title: "Sourcing & Quality Control",
+    description: "Identify, shortlist and audit Chinese robotics and physical-AI suppliers against your specifications, from component makers to system integrators, then follow production and quality through to shipment."
+  },
+  {
+    icon: FileSearch,
+    title: "Due Diligence",
+    description: "Verification of capabilities, financial health, track record and client references, plus early, non-binding input on EU compliance readiness."
   },
   {
     icon: Handshake,
@@ -12,19 +17,14 @@ const services = [
     description: "Bridge cultural and business gaps to facilitate successful partnerships, joint ventures, and strategic alliances with Chinese robotics firms."
   },
   {
-    icon: FileSearch,
-    title: "Due Diligence",
-    description: "Comprehensive verification of Chinese robotics companies including financial health, technical capabilities, client references, and regulatory compliance."
-  },
-  {
-    icon: Activity,
-    title: "Market Monitoring",
-    description: "Real-time tracking of China's robotics landscape including emerging players, funding rounds, product launches, and competitive movements."
-  },
-  {
     icon: Building2,
     title: "Market Representation",
     description: "Serve as your on-the-ground presence in China, attending trade shows, meeting potential partners, and representing your interests."
+  },
+  {
+    icon: Activity,
+    title: "Market Intelligence",
+    description: "Tracking of China's robotics landscape: emerging players, funding rounds, product launches and competitive moves."
   },
   {
     icon: Lightbulb,
@@ -52,7 +52,7 @@ export function ServicesSection() {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service, index) => (
             <div 
-              key={index}
+              key={service.title}
               className="group relative p-6 rounded-2xl bg-gradient-to-b from-[#0f0f19]/90 to-[#0a0a0f]/90 border border-[#00a8ff]/20 backdrop-blur-sm hover:border-[#00f0ff]/50 transition-all duration-300 hover:-translate-y-1"
             >
               {/* Glassmorphism effect */}
