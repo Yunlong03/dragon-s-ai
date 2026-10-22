@@ -1,30 +1,25 @@
-# Dragon C AI
+# Dragon C
 
-Advisory firm bridging Western companies with China's robotics ecosystem.
+China robotics and physical-AI sourcing for Western companies.
 
 ## What This Is
 
-Landing page for Dragon C AI — a robotics-focused advisory firm offering sourcing, partnership facilitation, due diligence, market monitoring, market representation, and strategic advisory services.
+Website for Dragon C (dragonc.hk), a brand of Dragon Caravan Limited. Dragon C sources, vets and manages Chinese robotics and physical-AI suppliers: sourcing and quality control, due diligence, partnership facilitation, market representation, market intelligence and strategic advisory. The site includes a Deal Flow Tracker built from `data/companies.csv`.
 
 ## Tech Stack
 
-- React + TypeScript
+- Next.js, React, TypeScript
 - Tailwind CSS
-- Next.js
-- Generated with v0.dev, customized in Cursor
+- Node 22 (see `.node-version`)
 
 ## Run Locally
 ```
-npm install
+npm ci
 npm run dev
 ```
 
 Visit http://localhost:3000
 
-## Status
-
-MVP landing page. Backend tools (Deal Flow Tracker, AI monitoring) coming in Weeks 3-6.
-
 ## Part Of
 
-Dragon Caravan company family. A Dragon C AI project.
+Dragon Caravan company family.

@@ -16,7 +16,7 @@
   --secondary: #1a1a2e;
   --secondary-foreground: #e4e4e7;
   --muted: #16161f;
-  --muted-foreground: #71717a;
+  --muted-foreground: #8b8b94; /* >= 5:1 on #0a0a0f, #0f0f19 and #1a1a2e */
   --accent: #00f0ff;
   --accent-foreground: #0a0a0f;
   --destructive: #ef4444;
@@ -52,7 +52,7 @@
   --secondary: #1a1a2e;
   --secondary-foreground: #e4e4e7;
   --muted: #16161f;
-  --muted-foreground: #71717a;
+  --muted-foreground: #8b8b94; /* >= 5:1 on #0a0a0f, #0f0f19 and #1a1a2e */
   --accent: #00f0ff;
   --accent-foreground: #0a0a0f;
   --destructive: #ef4444;
@@ -122,5 +122,22 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Visitors who turn off motion get no pulsing shapes, bouncing hint or animated transitions. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
